@@ -3,11 +3,11 @@ import 'package:flutter/services.dart';
 import 'package:payments_card_animation/card_views/card_back_ui.dart';
 import 'package:payments_card_animation/bloc/card_bloc.dart';
 import 'package:payments_card_animation/card_views/card_front_ui.dart';
-import 'package:payments_card_animation/card_visualizer_controller.dart';
+import 'package:payments_card_animation/card_animation/card_visualizer_controller.dart';
 import 'package:payments_card_animation/constants.dart';
 
 import 'bloc/card_bloc_provider.dart';
-import 'card_visualizer.dart';
+import 'card_animation/card_visualizer.dart';
 
 class CardDetailsPage extends StatefulWidget {
   @override
@@ -194,6 +194,7 @@ class CustomTextField extends StatelessWidget {
           style: TextStyle(fontWeight: FontWeight.w300),
           keyboardType: keyboardType,
           focusNode: focusNode,
+          textCapitalization: TextCapitalization.words,
         )
       ],
     );
