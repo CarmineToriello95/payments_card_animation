@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:payments_card_animation/card_bloc_provider.dart';
+import 'package:payments_card_animation/bloc/card_bloc_provider.dart';
 import 'package:payments_card_animation/constants.dart';
 
 class CardFrontUI extends StatelessWidget {
@@ -11,7 +11,8 @@ class CardFrontUI extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15.0),
       ),
-      margin: const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 32.0),
+      margin: const EdgeInsets.only(
+          left: 16.0, right: 16.0, bottom: 32.0, top: 16.0),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -19,12 +20,14 @@ class CardFrontUI extends StatelessWidget {
           children: <Widget>[
             Align(
               alignment: Alignment.centerRight,
-              child: AnimatedContainer(
-                duration: Duration(milliseconds: 250),
-                child: Image.asset(
-                  'assets/images/mastercard.png',
-                  height: 50.0,
-                ),
+              child: StreamBuilder<String>(
+                stream: CardBlocProvider.of(context).bloc.sCardNumber,
+                builder: (_, snapshot) {
+                  return Image.asset(
+                    'assets/images/mastercard.png',
+                    height: 50.0,
+                  );
+                },
               ),
             ),
             SizedBox(
@@ -33,19 +36,20 @@ class CardFrontUI extends StatelessWidget {
             Align(
               alignment: Alignment.centerLeft,
               child: StreamBuilder<String>(
-                  stream: CardBlocProvider.of(context).bloc.sCardNumber,
-                  builder: (_, snapshot) {
-                    return Text(
-                      snapshot.data ?? '',
-                      style:
-                          TextStyle(fontSize: 24.0, letterSpacing: 2, shadows: [
-                        Shadow(
-                          color: Colors.black12,
-                          offset: Offset(2, 1),
-                        )
-                      ]),
-                    );
-                  }),
+                stream: CardBlocProvider.of(context).bloc.sCardNumber,
+                builder: (_, snapshot) {
+                  return Text(
+                    snapshot.data ?? '',
+                    style:
+                        TextStyle(fontSize: 24.0, letterSpacing: 2, shadows: [
+                      Shadow(
+                        color: Colors.black12,
+                        offset: Offset(2, 1),
+                      )
+                    ]),
+                  );
+                },
+              ),
             ),
             SizedBox(
               height: 32.0,

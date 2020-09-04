@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:payments_card_animation/card_bloc.dart';
+import 'package:payments_card_animation/bloc/card_bloc.dart';
 
 class CardBlocProvider extends InheritedWidget {
   CardBlocProvider({Key key, Widget child, this.bloc})

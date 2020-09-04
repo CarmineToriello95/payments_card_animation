@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:payments_card_animation/card_bloc.dart';
-import 'package:payments_card_animation/card_front_ui.dart';
+import 'package:payments_card_animation/card_views/card_back_ui.dart';
+import 'package:payments_card_animation/bloc/card_bloc.dart';
+import 'package:payments_card_animation/card_views/card_front_ui.dart';
+import 'package:payments_card_animation/card_visualizer_controller.dart';
 import 'package:payments_card_animation/constants.dart';
 
-import 'card_bloc_provider.dart';
+import 'bloc/card_bloc_provider.dart';
+import 'card_visualizer.dart';
 
 class CardDetailsPage extends StatefulWidget {
   @override
@@ -14,6 +17,19 @@ class CardDetailsPage extends StatefulWidget {
 class _CardDetailsPageState extends State<CardDetailsPage> {
   double _screenHeight;
   final CardBloc _cardBloc = CardBloc();
+  final FocusNode _secureCodeFocusNode = FocusNode();
+  final CardVisualizerController _cardVisualizerController =
+      CardVisualizerController();
+
+  @override
+  void initState() {
+    super.initState();
+    _initValues();
+  }
+
+  _initValues() {
+    _secureCodeFocusNode.addListener(() => _cardVisualizerController.toggle());
+  }
 
   @override
   void didChangeDependencies() {
@@ -21,6 +37,14 @@ class _CardDetailsPageState extends State<CardDetailsPage> {
     _screenHeight = MediaQuery.of(context).size.height -
         AppBar().preferredSize.height -
         MediaQuery.of(context).padding.top;
+  }
+
+  @override
+  void dispose() {
+    _cardVisualizerController.dispose();
+    _secureCodeFocusNode.dispose();
+    _cardBloc.dispose();
+    super.dispose();
   }
 
   @override
@@ -50,7 +74,12 @@ class _CardDetailsPageState extends State<CardDetailsPage> {
             children: <Widget>[
               Container(
                 height: _screenHeight * 1.1 / 3,
-                child: CardFrontUI(),
+                child: CardVisualizer(
+                  widgetFront: CardFrontUI(),
+                  widgetBack: CardBackUI(),
+                  controller: _cardVisualizerController,
+                  enableScroll: false,
+                ),
               ),
               Container(
                 height: _screenHeight * 1.9 / 3,
@@ -92,6 +121,7 @@ class _CardDetailsPageState extends State<CardDetailsPage> {
                             label: 'Secure Code',
                             onChanged: _cardBloc.changeCardSecureCode,
                             keyboardType: TextInputType.number,
+                            focusNode: _secureCodeFocusNode,
                           ),
                         ),
                       ],
@@ -136,11 +166,13 @@ class CustomTextField extends StatelessWidget {
   final Function onChanged;
   final TextInputType keyboardType;
   final int maxLength;
+  final FocusNode focusNode;
   CustomTextField(
       {this.label = '',
       this.onChanged,
       this.keyboardType = TextInputType.text,
-      this.maxLength = 20});
+      this.maxLength = 20,
+      this.focusNode});
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -161,6 +193,7 @@ class CustomTextField extends StatelessWidget {
           cursorColor: labelColor,
           style: TextStyle(fontWeight: FontWeight.w300),
           keyboardType: keyboardType,
+          focusNode: focusNode,
         )
       ],
     );
