@@ -23,9 +23,16 @@ class CardFrontUI extends StatelessWidget {
               child: StreamBuilder<String>(
                 stream: CardBlocProvider.of(context).bloc.sCardNumber,
                 builder: (_, snapshot) {
-                  return Image.asset(
-                    'assets/images/mastercard.png',
-                    height: 50.0,
+                  return AnimatedContainer(
+                    duration: Duration(milliseconds: 200),
+                    height: snapshot.hasData && snapshot.data[0] != '*'
+                        ? 50.0
+                        : 0.0,
+                    child: snapshot.hasData && snapshot.data[0] == '5'
+                        ? Image.asset('assets/images/mastercard.png')
+                        : snapshot.data[0] == '4'
+                            ? Image.asset('assets/images/visa.png')
+                            : Container(),
                   );
                 },
               ),
