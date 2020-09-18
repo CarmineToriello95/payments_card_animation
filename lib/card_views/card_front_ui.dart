@@ -18,24 +18,29 @@ class CardFrontUI extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            Align(
-              alignment: Alignment.centerRight,
-              child: StreamBuilder<String>(
-                stream: CardBlocProvider.of(context).bloc.sCardNumber,
-                builder: (_, snapshot) {
-                  return AnimatedContainer(
-                    duration: Duration(milliseconds: 200),
-                    height: snapshot.hasData && snapshot.data[0] != '*'
-                        ? 50.0
-                        : 0.0,
-                    child: snapshot.hasData && snapshot.data[0] == '5'
-                        ? Image.asset('assets/images/mastercard.png')
-                        : snapshot.data[0] == '4'
-                            ? Image.asset('assets/images/visa.png')
-                            : Container(),
-                  );
-                },
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                SizedBox(
+                  height: 50.0,
+                ),
+                StreamBuilder<String>(
+                  stream: CardBlocProvider.of(context).bloc.sCardNumber,
+                  builder: (_, snapshot) {
+                    return AnimatedContainer(
+                      duration: Duration(milliseconds: 300),
+                      height: snapshot.hasData && snapshot.data[0] != '*'
+                          ? 50.0
+                          : 0.0,
+                      child: snapshot.hasData && snapshot.data[0] == '5'
+                          ? Image.asset('assets/images/mastercard.png')
+                          : snapshot.hasData && snapshot.data[0] == '4'
+                              ? Image.asset('assets/images/visa.png')
+                              : Container(),
+                    );
+                  },
+                ),
+              ],
             ),
             SizedBox(
               height: 16.0,
